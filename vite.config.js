@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: './',
+  base: '/deep-blue-chess',
   server: {
     host: true,
     port: 5173,
