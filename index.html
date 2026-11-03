@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#101319" />
+    <meta name="description" content="Deep Blue: Grandmaster Chess — a premium 3D chess experience with a classical grandmaster engine." />
+    <title>Deep Blue · Grandmaster Chess</title>
+    <link rel="icon" type="image/svg+xml" href="/deep-blue-chess/assets/logo-BGFGzu9B.svg" />
+    <script type="module" crossorigin src="/deep-blue-chess/assets/index-3q-qXdrt.js"></script>
+    <link rel="stylesheet" crossorigin href="/deep-blue-chess/assets/index-DGEHkWWw.css">
+  </head>
+  <body>
+    <div class="background-glow" aria-hidden="true"></div>
+    <div id="app">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-emblem" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none">
+              <circle cx="24" cy="24" r="21" stroke="currentColor" stroke-width="1.4" opacity=".7" />
+              <path d="M16 34h16l-1.6-4H17.6L16 34Z" fill="currentColor" />
+              <path d="M18 30c0-4 1.4-6.8 4.2-9.2 1.6-1.4 2-3.2 1.4-4.8l-1.8-1.4 4.8-1.4.6 4.8 3.4 2.2c1.8 1.2 2.4 3 1.6 4.4-.8 1.4-2.6 1.6-4 .6l-1.4-1c-.8 2.6-.2 4.6 1.2 5.8H18Z" fill="currentColor" opacity=".92" />
+            </svg>
+          </div>
+          <div class="brand-copy">
+            <h1>DEEP BLUE</h1>
+            <span>GRANDMASTER CHESS</span>
+          </div>
+        </div>
+
+        <nav class="top-actions" aria-label="Main actions">
+          <button class="btn btn-ghost" type="button" data-action="new-game">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+            <span>New Game</span>
+          </button>
+          <button class="btn btn-ghost" type="button" data-action="library">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v18H6.5A2.5 2.5 0 0 1 4 18.5v-13Z" /><path d="M4 18.5A2.5 2.5 0 0 1 6.5 16H20" /></svg>
+            <span>Library</span>
+          </button>
+          <button class="btn btn-ghost" type="button" data-action="settings">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2" /><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06-2.83 2.83-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.03 1.56V21h-4v-.08A1.7 1.7 0 0 0 8.98 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.62 15a1.7 1.7 0 0 0-1.56-1.03H3v-4h.08A1.7 1.7 0 0 0 4.6 8.94a1.7 1.7 0 0 0-.34-1.87l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 8.96 4.6 1.7 1.7 0 0 0 10 3.04V3h4v.08A1.7 1.7 0 0 0 15.02 4.6a1.7 1.7 0 0 0 1.87-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 9c.24.63.85 1.02 1.52 1.03H21v4h-.08A1.7 1.7 0 0 0 19.4 15Z" /></svg>
+            <span>Settings</span>
+          </button>
+          <button class="btn btn-icon" type="button" data-action="help" aria-label="How to play">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M9.6 9.2a2.5 2.5 0 1 1 3.4 2.34c-.7.28-1 .82-1 1.56v.4" /><path d="M12 17h.01" /></svg>
+          </button>
+        </nav>
+      </header>
+
+      <main class="layout">
+        <aside class="side-panel side-left" id="panel-info">
+          <div class="panel-scroll">
+            <section class="player-card" id="player-opponent" aria-label="Opponent">
+              <div class="player-avatar" id="opponent-avatar"><span>♚</span></div>
+              <div class="player-main">
+                <div class="player-heading">
+                  <div>
+                    <strong id="opponent-name">Deep Blue</strong>
+                    <span id="opponent-rating">Engine · 2800</span>
+                  </div>
+                  <div class="clock" id="opponent-clock">--:--</div>
+                </div>
+                <div class="captured-row">
+                  <div class="captured-pieces" id="opponent-captured"></div>
+                  <span class="material-diff" id="opponent-material"></span>
+                </div>
+              </div>
+            </section>
+
+            <section class="game-status-card">
+              <div class="status-eyebrow" id="status-eyebrow">GAME STATUS</div>
+              <h2 id="status-title">White to move</h2>
+              <p id="status-sub">The board is ready.</p>
+              <div class="status-tags">
+                <span class="tag" id="tag-check">Check</span>
+                <span class="tag" id="tag-last-move">Last move —</span>
+              </div>
+              <div class="status-actions">
+                <button class="btn btn-subtle" type="button" data-action="offer-draw">Offer Draw</button>
+                <button class="btn btn-subtle danger" type="button" data-action="resign">Resign</button>
+              </div>
+            </section>
+
+            <section class="player-card" id="player-you" aria-label="Player">
+              <div class="player-avatar" id="player-avatar"><span>♔</span></div>
+              <div class="player-main">
+                <div class="player-heading">
+                  <div>
+                    <strong id="player-name">You</strong>
+                    <span id="player-rating">White · Human</span>
+                  </div>
+                  <div class="clock" id="player-clock">--:--</div>
+                </div>
+                <div class="captured-row">
+                  <div class="captured-pieces" id="player-captured"></div>
+                  <span class="material-diff" id="player-material"></span>
+                </div>
+              </div>
+            </section>
+
+            <section class="card eval-card">
+              <div class="card-heading">
+                <span>POSITION</span>
+                <span id="position-eval" class="mono">0.00</span>
+              </div>
+              <div class="eval-meter" role="meter" aria-label="Evaluation">
+                <div class="eval-meter-white" id="eval-fill"></div>
+                <div class="eval-meter-mid"></div>
+              </div>
+              <div class="eval-labels"><span>White</span><span>Black</span></div>
+            </section>
+          </div>
+        </aside>
+
+        <section class="board-area">
+          <div class="board-stage" id="board-stage">
+            <div class="scene-container" id="scene-container"></div>
+            <div class="vignette" aria-hidden="true"></div>
+
+            <div class="stage-top">
+              <div class="stage-pill" id="stage-turn">
+                <span class="turn-dot"></span>
+                <span id="stage-turn-text">White to move</span>
+              </div>
+              <div class="stage-pill subtle" id="stage-engine">
+                <span class="pulse-dot" id="engine-pulse"></span>
+                <span id="stage-engine-text">Engine ready</span>
+              </div>
+            </div>
+
+            <div class="thinking-overlay" id="thinking-overlay" aria-live="polite">
+              <div class="thinking-card">
+                <div class="thinking-orb"><span></span><span></span><span></span></div>
+                <div>
+                  <strong id="thinking-title">Deep Blue is thinking</strong>
+                  <span id="thinking-detail">Depth 0 · 0 nodes</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="review-banner" id="review-banner">
+              <span id="review-text">Reviewing position</span>
+              <button class="btn btn-gold btn-small" type="button" data-action="go-live">Return to live</button>
+            </div>
+
+            <div class="promotion" id="promotion-dialog" role="dialog" aria-modal="true" aria-label="Choose promotion piece">
+              <div class="promotion-card">
+                <span class="promotion-title">Promote to</span>
+                <div class="promotion-options">
+                  <button type="button" data-promotion="q" aria-label="Queen"><span class="piece-glyph white">♕</span><span>Queen</span></button>
+                  <button type="button" data-promotion="r" aria-label="Rook"><span class="piece-glyph white">♖</span><span>Rook</span></button>
+                  <button type="button" data-promotion="b" aria-label="Bishop"><span class="piece-glyph white">♗</span><span>Bishop</span></button>
+                  <button type="button" data-promotion="n" aria-label="Knight"><span class="piece-glyph white">♘</span><span>Knight</span></button>
+                </div>
+                <button class="btn btn-ghost btn-small" type="button" data-action="cancel-promotion">Cancel</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="board-toolbar" aria-label="Camera controls">
+            <div class="toolbar-group">
+              <button class="tool-btn" type="button" data-camera="standard" title="Standard view">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 5v8l-8 5-8-5V8l8-5Z" /><path d="m4 8 8 5 8-5M12 13v8" /></svg>
+                <span>Standard</span>
+              </button>
+              <button class="tool-btn" type="button" data-camera="top" title="Top view">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2" /><path d="M9 4v16M15 4v16M4 9h16M4 15h16" /></svg>
+                <span>Top</span>
+              </button>
+              <button class="tool-btn" type="button" data-camera="white" title="White player view">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3" /><path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6" /></svg>
+                <span>White</span>
+              </button>
+              <button class="tool-btn" type="button" data-camera="black" title="Black player view">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3" /><path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6" /><path d="M4 4l16 16" /></svg>
+                <span>Black</span>
+              </button>
+              <button class="tool-btn" type="button" data-camera="cinematic" title="Cinematic view">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 6 5-3 6 3 5-3v15l-5 3-6-3-5 3V6Z" /><path d="M9 3v15M15 6v15" /></svg>
+                <span>Cinematic</span>
+              </button>
+            </div>
+            <div class="toolbar-divider"></div>
+            <div class="toolbar-group compact">
+              <button class="tool-btn icon-only" type="button" data-camera-action="rotate-left" title="Rotate left">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1.3 7.3" /><path d="M4 4v6h6" /></svg>
+              </button>
+              <button class="tool-btn icon-only" type="button" data-camera-action="rotate-right" title="Rotate right">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10a8 8 0 1 0-1.3 7.3" /><path d="M20 4v6h-6" /></svg>
+              </button>
+              <button class="tool-btn icon-only" type="button" data-camera-action="zoom-in" title="Zoom in">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4M11 8v6M8 11h6" /></svg>
+              </button>
+              <button class="tool-btn icon-only" type="button" data-camera-action="zoom-out" title="Zoom out">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4M8 11h6" /></svg>
+              </button>
+              <button class="tool-btn icon-only" type="button" data-camera-action="reset" title="Reset camera">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1.3 7.3" /><path d="M4 4v6h6" /></svg>
+              </button>
+              <button class="tool-btn icon-only" type="button" data-camera-action="flip" title="Switch side">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4 3 8l4 4M3 8h13a5 5 0 0 1 0 10H8" /></svg>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <aside class="side-panel side-right" id="panel-engine">
+          <div class="panel-scroll">
+            <section class="card engine-card">
+              <div class="card-heading">
+                <span>ENGINE ANALYSIS</span>
+                <span class="engine-state" id="engine-state"><span class="dot"></span>Idle</span>
+              </div>
+              <div class="analysis-stats">
+                <div><span>Depth</span><strong id="stat-depth">—</strong></div>
+                <div><span>Nodes</span><strong id="stat-nodes">—</strong></div>
+                <div><span>NPS</span><strong id="stat-nps">—</strong></div>
+                <div><span>Time</span><strong id="stat-time">—</strong></div>
+              </div>
+              <div class="engine-eval">
+                <span id="engine-eval-score" class="mono">0.00</span>
+                <span id="engine-eval-label">Equal position</span>
+              </div>
+              <div class="search-track"><div id="search-progress"></div></div>
+              <div class="pv-block">
+                <span class="pv-label">PRINCIPAL VARIATION</span>
+                <div class="pv-line" id="pv-line">Play a move to begin analysis.</div>
+              </div>
+              <div class="engine-foot">
+                <span>Deep Blue classical engine</span>
+                <span id="engine-config">Depth 4 · 2.0s</span>
+              </div>
+            </section>
+
+            <section class="card moves-card">
+              <div class="card-heading">
+                <span>MOVE HISTORY</span>
+                <span class="mono muted" id="move-count">0 moves</span>
+              </div>
+              <div class="move-list" id="move-list" aria-label="Move history">
+                <div class="move-empty">No moves yet.<br /><span>The game begins with White.</span></div>
+              </div>
+              <div class="history-controls">
+                <button class="icon-btn" type="button" data-action="history-start" title="Start">|&lt;</button>
+                <button class="icon-btn" type="button" data-action="undo" title="Undo">‹</button>
+                <button class="icon-btn" type="button" data-action="redo" title="Redo">›</button>
+                <button class="icon-btn" type="button" data-action="history-end" title="Live">&gt;|</button>
+                <button class="btn btn-subtle btn-small" type="button" data-action="undo">Undo</button>
+              </div>
+            </section>
+
+            <section class="card meta-card">
+              <div class="card-heading"><span>GAME</span><span id="game-mode-label">Vs Computer</span></div>
+              <div class="meta-grid">
+                <div><span>Difficulty</span><strong id="meta-difficulty">Master</strong></div>
+                <div><span>Time control</span><strong id="meta-time">10 + 0</strong></div>
+                <div><span>You play</span><strong id="meta-side">White</strong></div>
+                <div><span>Book</span><strong id="meta-book">Enabled</strong></div>
+              </div>
+            </section>
+          </div>
+        </aside>
+      </main>
+
+      <nav class="mobile-tabs" aria-label="Panels">
+        <button type="button" data-mobile-tab="info">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 11v5M12 8h.01" /></svg>
+          <span>Info</span>
+        </button>
+        <button type="button" data-mobile-tab="engine">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2" /></svg>
+          <span>Engine</span>
+        </button>
+        <button type="button" data-mobile-tab="moves">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M5 12h14M5 18h9" /></svg>
+          <span>Moves</span>
+        </button>
+      </nav>
+    </div>
+
+    <div class="toast-stack" id="toast-stack" aria-live="polite"></div>
+
+    <div class="modal-root" id="modal-root" aria-hidden="true">
+      <div class="modal-backdrop" data-close-modal></div>
+
+      <section class="modal" id="modal-new-game" role="dialog" aria-modal="true" aria-labelledby="new-game-title">
+        <button class="modal-close" type="button" data-close-modal aria-label="Close">×</button>
+        <header class="modal-header">
+          <span class="modal-eyebrow">NEW MATCH</span>
+          <h2 id="new-game-title">Set the board</h2>
+          <p>Choose your opponent, side and time control.</p>
+        </header>
+
+        <div class="form-section">
+          <label class="form-label">Opponent</label>
+          <div class="segmented" data-group="mode">
+            <button type="button" data-value="ai" class="active">Computer</button>
+            <button type="button" data-value="human">Two Players</button>
+          </div>
+        </div>
+
+        <div class="form-row" id="ai-options">
+          <div class="form-section">
+            <label class="form-label">Play as</label>
+            <div class="segmented" data-group="side">
+              <button type="button" data-value="w" class="active">White</button>
+              <button type="button" data-value="b">Black</button>
+              <button type="button" data-value="random">Random</button>
+            </div>
+          </div>
+          <div class="form-section">
+            <label class="form-label">Engine strength</label>
+            <select id="new-difficulty" class="select">
+              <option value="novice">Novice · Depth 2</option>
+              <option value="club">Club · Depth 3</option>
+              <option value="expert">Expert · Depth 4</option>
+              <option value="master" selected>Master · Depth 5</option>
+              <option value="grandmaster">Grandmaster · Depth 6</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <label class="form-label">Time control</label>
+          <div class="time-grid">
+            <button type="button" class="time-option" data-time="3,2"><strong>3 + 2</strong><span>Blitz</span></button>
+            <button type="button" class="time-option active" data-time="10,0"><strong>10 + 0</strong><span>Rapid</span></button>
+            <button type="button" class="time-option" data-time="15,10"><strong>15 + 10</strong><span>Classical</span></button>
+            <button type="button" class="time-option" data-time="0,0"><strong>∞</strong><span>Unlimited</span></button>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn btn-ghost" type="button" data-close-modal>Cancel</button>
+          <button class="btn btn-gold" type="button" data-action="start-game">Start Game</button>
+        </div>
+      </section>
+
+      <section class="modal modal-wide" id="modal-settings" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+        <button class="modal-close" type="button" data-close-modal aria-label="Close">×</button>
+        <header class="modal-header">
+          <span class="modal-eyebrow">PREFERENCES</span>
+          <h2 id="settings-title">Settings</h2>
+          <p>Fine-tune the board, feedback and engine.</p>
+        </header>
+        <div class="settings-grid">
+          <label class="switch-row">
+            <span><strong>Sound effects</strong><small>Subtle move, capture and check sounds.</small></span>
+            <input type="checkbox" id="setting-sound" checked />
+            <span class="switch"></span>
+          </label>
+          <label class="switch-row">
+            <span><strong>Piece animations</strong><small>Smooth movement and capture effects.</small></span>
+            <input type="checkbox" id="setting-animations" checked />
+            <span class="switch"></span>
+          </label>
+          <label class="switch-row">
+            <span><strong>Legal move hints</strong><small>Show destination markers for the selected piece.</small></span>
+            <input type="checkbox" id="setting-hints" checked />
+            <span class="switch"></span>
+          </label>
+          <label class="switch-row">
+            <span><strong>Coordinates</strong><small>Display file and rank labels around the board.</small></span>
+            <input type="checkbox" id="setting-coordinates" checked />
+            <span class="switch"></span>
+          </label>
+          <label class="switch-row">
+            <span><strong>Last move highlight</strong><small>Mark the origin and destination of the last move.</small></span>
+            <input type="checkbox" id="setting-lastmove" checked />
+            <span class="switch"></span>
+          </label>
+          <label class="switch-row">
+            <span><strong>Live analysis</strong><small>Continuously evaluate the position in the background.</small></span>
+            <input type="checkbox" id="setting-analysis" checked />
+            <span class="switch"></span>
+          </label>
+          <label class="switch-row">
+            <span><strong>Opening book</strong><small>Let Deep Blue open with classical book lines.</small></span>
+            <input type="checkbox" id="setting-book" checked />
+            <span class="switch"></span>
+          </label>
+        </div>
+        <div class="form-section">
+          <label class="form-label">Analysis depth</label>
+          <div class="range-row">
+            <input type="range" id="setting-analysis-depth" min="2" max="6" step="1" value="3" />
+            <span class="mono" id="analysis-depth-value">3 ply</span>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" type="button" data-action="reset-settings">Restore defaults</button>
+          <button class="btn btn-gold" type="button" data-close-modal>Done</button>
+        </div>
+      </section>
+
+      <section class="modal modal-wide" id="modal-library" role="dialog" aria-modal="true" aria-labelledby="library-title">
+        <button class="modal-close" type="button" data-close-modal aria-label="Close">×</button>
+        <header class="modal-header">
+          <span class="modal-eyebrow">ARCHIVE</span>
+          <h2 id="library-title">Your library</h2>
+          <p>Saved games and positions live locally in your browser.</p>
+        </header>
+        <div class="library-tabs">
+          <button type="button" class="active" data-library-tab="games">Games</button>
+          <button type="button" data-library-tab="positions">Positions</button>
+          <button class="btn btn-subtle btn-small" type="button" data-action="save-position">Save current position</button>
+        </div>
+        <div class="library-list" id="library-list">
+          <div class="library-empty">No saved entries yet.</div>
+        </div>
+      </section>
+
+      <section class="modal" id="modal-help" role="dialog" aria-modal="true" aria-labelledby="help-title">
+        <button class="modal-close" type="button" data-close-modal aria-label="Close">×</button>
+        <header class="modal-header">
+          <span class="modal-eyebrow">FIELD MANUAL</span>
+          <h2 id="help-title">How to play</h2>
+          <p>A quick guide to the board and controls.</p>
+        </header>
+        <div class="help-list">
+          <div><strong>Move pieces</strong><span>Click a piece, then a highlighted square — or drag it directly.</span></div>
+          <div><strong>Rotate camera</strong><span>Drag on an empty area, or use the toolbar presets.</span></div>
+          <div><strong>Pan</strong><span>Right-drag or two-finger drag.</span></div>
+          <div><strong>Zoom</strong><span>Scroll wheel or pinch gesture.</span></div>
+          <div><strong>Review</strong><span>Click any move in the move history to revisit the position.</span></div>
+          <div><strong>Shortcuts</strong><span>N new game · U undo · R redo · F flip · Esc close dialogs</span></div>
+        </div>
+        <p class="help-note">
+          The engine uses classical alpha-beta search, transposition tables, quiescence and a
+          tapered evaluation. It is inspired by the philosophy of Deep Blue, not a reproduction
+          of its hardware or strength.
+        </p>
+        <div class="modal-actions">
+          <button class="btn btn-gold" type="button" data-close-modal>Understood</button>
+        </div>
+      </section>
+
+      <section class="modal modal-compact" id="modal-confirm" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+        <header class="modal-header">
+          <span class="modal-eyebrow" id="confirm-eyebrow">CONFIRM</span>
+          <h2 id="confirm-title">Are you sure?</h2>
+          <p id="confirm-text"></p>
+        </header>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" type="button" data-close-modal>Cancel</button>
+          <button class="btn btn-gold" type="button" id="confirm-accept">Confirm</button>
+        </div>
+      </section>
+
+      <section class="modal modal-compact gameover" id="modal-gameover" role="dialog" aria-modal="true" aria-labelledby="gameover-title">
+        <div class="gameover-crest" id="gameover-crest">♔</div>
+        <header class="modal-header">
+          <span class="modal-eyebrow">GAME OVER</span>
+          <h2 id="gameover-title">White wins</h2>
+          <p id="gameover-reason">Checkmate</p>
+        </header>
+        <div class="gameover-summary">
+          <div><span>Moves</span><strong id="gameover-moves">0</strong></div>
+          <div><span>Time</span><strong id="gameover-time">00:00</strong></div>
+          <div><span>Result</span><strong id="gameover-result">1 – 0</strong></div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" type="button" data-action="review-game">Review</button>
+          <button class="btn btn-ghost" type="button" data-action="rematch">Rematch</button>
+          <button class="btn btn-gold" type="button" data-action="new-game">New Game</button>
+        </div>
+      </section>
+    </div>
+
+  </body>
+</html>
